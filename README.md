@@ -1,4 +1,4 @@
-My name is Cooper Malone and welcome to my portfolio.
+My name is Cooper Malone and welcome to my portfolio!
 
 There is a readme and pdf paper in each project folder that explain the projects in more detail. 
 This repository is to show the completion of projects, not for you to run yourself.
