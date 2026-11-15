@@ -1,0 +1,12 @@
+[project]
+name = "adaptive-chunk-compression"
+version = "0.1.0"
+description = "Benchmarking adaptive chunk-based compression for inverted index posting lists"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pytest>=9.0.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
