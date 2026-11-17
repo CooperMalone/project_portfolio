@@ -1,0 +1,4 @@
+risk_tier,locations,crashes,ksi,pct_locations,pct_crashes,pct_ksi,ksi_per_100_locations
+High,702,3431,53,23.5,50.6,52.0,7.5
+Moderate,959,1629,35,32.1,24.0,34.3,3.6
+Low,1331,1716,14,44.5,25.3,13.7,1.1

@@ -75,7 +75,7 @@ def render_bar(value: float, max_value: float, width: int = 40) -> str:
     if max_value <= 0:
         return ""
     length = int((value / max_value) * width)
-    return "█" * length + " " * (width - length)
+    return "#" * length + " " * (width - length)
 
 
 def summarize_adaptive(compressed: dict) -> Counter:

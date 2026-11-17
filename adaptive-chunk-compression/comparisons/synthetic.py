@@ -122,7 +122,7 @@ def test_dataset(name, data, chunk_size=128):
     }
 
     winner = min(fixed_sizes, key=fixed_sizes.get)
-    print(f"\n🏆 Winner: {winner}")
+    print(f"\nWinner: {winner}")
 
 
 # =========================

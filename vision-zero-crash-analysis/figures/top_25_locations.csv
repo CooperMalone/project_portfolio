@@ -1,0 +1,26 @@
+rank,location,type,crashes,ksi_crashes,adt,hrn_tier,hrn_score,lockey,lat,lon
+1,O St & 27th St,Intersection,51,0,58310,High,8,8653,40.81354,-96.68226
+2,O St & 48th St,Intersection,46,0,60320,High,8,8687,40.81343,-96.65378
+3,Cornhusker Hwy & N 27th St,Intersection,41,0,58610,High,8,2655,40.84262,-96.68222
+4,Superior St & N 14th St,Intersection,38,1,41020,High,6,11875,40.85751,-96.70108
+5,Nebraska Pkwy & S 27th St,Intersection,34,0,57240,High,8,8353,40.76954,-96.68292
+6,Superior St & N 27th St,Intersection,30,1,51410,High,8,11883,40.85712,-96.68212
+7,O St & Antelope Valley Pkwy,Intersection,30,0,49490,High,8,8637,40.81361,-96.69386
+8,S 48th St (Antelope Creek Rd to Van Dorn St),Road segment,27,0,17160,High,6,18444,40.78585,-96.65372
+9,I-180 (Cornhusker Hwy to R St),Road segment,26,1,30920,High,8,5900,40.82443,-96.71148
+10,Nebraska Pkwy & Old Cheney Rd,Intersection,25,1,45360,High,8,8365,40.75432,-96.64037
+11,O St & 33rd St,Intersection,24,0,45610,High,8,8667,40.81348,-96.67284
+12,Cornhusker Hwy & N 48th St,Intersection,24,1,34060,High,8,2665,40.85198,-96.65363
+13,O St & 84th St,Intersection,24,1,48970,High,8,8719,40.81349,-96.60594
+14,Cotner Blvd & O St,Intersection,23,1,50070,High,8,2757,40.81338,-96.64178
+15,Vine St & N 27th St,Intersection,23,0,47820,High,8,12617,40.82075,-96.68224
+16,O St & 70th St,Intersection,22,1,58520,High,8,8711,40.81339,-96.62499
+17,Cornhusker Hwy & N 11th St,Intersection,22,0,39240,High,8,2641,40.83758,-96.70606
+18,Pioneers Blvd & S 56th St,Intersection,22,1,38550,High,8,9501,40.76974,-96.64427
+19,P St & N 9th St,Intersection,22,0,30980,High,8,9099,40.81476,-96.70847
+20,O St & 9th St,Intersection,22,0,47870,High,8,8617,40.81363,-96.7085
+21,Normal Blvd & S 48th St,Intersection,20,1,37190,High,8,8477,40.78818,-96.65371
+22,South St & S 27th St,Intersection,20,0,37430,High,8,11145,40.79168,-96.68246
+23,Old Cheney Rd & S 84th St,Intersection,20,0,42970,High,8,8869,40.7553,-96.6061
+24,Old Cheney Rd & S 56th St,Intersection,19,0,41370,High,8,8857,40.7546,-96.64429
+25,Nebraska Pkwy & S 48th St,Intersection,19,0,41580,High,8,8361,40.75932,-96.65379

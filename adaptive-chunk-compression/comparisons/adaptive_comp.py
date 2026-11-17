@@ -208,7 +208,7 @@ def adaptiveComparison():
         }
 
         winner = min(sizes, key=sizes.get)
-        print(f"\n🏆 Winner: {winner}")
+        print(f"\nWinner: {winner}")
 
         results.append({
             "chunk_size": chunk_size,
@@ -237,4 +237,4 @@ def adaptiveComparison():
             f"{r['winner']}"
         )
 
-    print("\n✓ All compressions verified!")
+    print("\nAll compressions verified!")

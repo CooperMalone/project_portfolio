@@ -16,3 +16,6 @@ runs/
 Thumbs.db
 .vscode/
 .idea/
+
+# Crash data provided by the City of Lincoln (not for redistribution)
+*.xlsx

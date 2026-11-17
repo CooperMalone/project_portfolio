@@ -1,33 +1,52 @@
-# Project Portfolio
+# Cooper Malone · Project Portfolio
 
-Welcome! This repository serves as a centralized archive showcasing technical projects, methodology, and end results across data science and machine learning.
+Data science, statistics and machine learning projects from my work at the University of Nebraska–Lincoln. Each folder has the source code, the results and a write-up. Start with the project README; the full paper or report is linked from it.
 
-> **Note:** This repository is intended as a static portfolio to document methodologies, experimental workflows, and completed research outcomes. It is not packaged for interactive local execution. Detailed documentation, source code, and full project papers are available within each dedicated directory.
-
----
-
-## Featured Projects
-
-### 1. [Adaptive Chunk-Based Compression](./Adaptive%20Chunk%20Based%20Compression)
-* **Overview:** Explores and benchmarks compression strategies for inverted index postings lists, evaluating trade-offs between compression ratio and query throughput.
-* **Deliverables:** Implementation code, benchmark evaluations, and the [complete research paper](./Adaptive%20Chunk%20Based%20Compression/Adaptive%20Chunk-Based%20Compression.docx.pdf).
-
-### 2. [Lane Marker Identification](./Lane%20Marker%20Identification)
-* **Overview:** Implements a deep learning pipeline (Spatial CNN / ResNet-18) on the CULane dataset for continuous structural detection and segmentation in challenging road conditions.
-* **Deliverables:** Model training workflows, visual output comparisons, and the [project technical report](./Lane%20Marker%20Identification/Lane%20Marker%20Identification.pdf).
+| Project | What it is | Headline result | Stack |
+|---|---|---|---|
+| [**Vision Zero Crash Analysis**](./vision-zero-crash-analysis) | Checks whether the patterns behind Lincoln, NE's traffic-safety plan still hold, using all 6,776 crashes from 2025. Work for the City of Lincoln. | Pedestrians were in **20.6%** of fatal/serious-injury crashes, nearly double the plan's 11.0% (p = 0.003). Also found **8 high-risk intersections** that a raw crash count misses. | Python, pandas, SciPy, Folium, Matplotlib |
+| [**Lane Marker Detection**](./lane-marker-detection) | A Spatial CNN (ResNet-18 backbone) that segments lane markings in CULane driving images, trained on a GPU cluster. | Best validation **F1 = 0.437**, mIoU = 0.295, over 96 epochs (the last 48 on the full 88k-image set). | PyTorch, CUDA/AMP, SLURM, OpenCV |
+| [**Adaptive Chunk-Based Compression**](./adaptive-chunk-compression) | Integer codecs for search-engine posting lists (vByte, Elias gamma, bit packing), plus an adaptive scheme that picks the best codec for each chunk. | The adaptive codec placed **first or second on every data distribution tested**, and up to **77% smaller** than vByte. | Python, pytest (98 tests), uv |
 
 ---
 
-## Repository Structure
+## Vision Zero Crash Analysis
+**Team of 3 · client: City of Lincoln · in progress**
 
-Each project folder contains:
-* **`README.md`**: An overview of the project scope, technical stack, and key findings.
-* **Technical Paper / Report (PDF)**: Detailed academic write-ups covering mathematical formulations, experimental setup, evaluation metrics, and conclusions.
-* **Source Files**: Implementation scripts and experiment configurations.
+<a href="./vision-zero-crash-analysis"><img src="./vision-zero-crash-analysis/figures/adt_excess_top20.png" alt="Intersections with the most crashes above what their traffic predicts" width="720"></a>
+
+The City of Lincoln gave our team its full 2025 crash records. The question was whether its *Vision Zero Action Plan*, built on 2014–2023 data, still describes the city's streets. I wrote the analysis pipeline:
+
+- **Hypothesis tests** (binomial and Poisson) of seven of the plan's headline statistics against 2025.
+- **Safety performance functions** fit by maximum likelihood to a zero-truncated negative binomial, then **empirical Bayes** estimates to rank 925 intersections by excess crashes for their traffic volume.
+- **Singular value decomposition** of crash conditions (weather, light, time of day) at the 47 highest-crash locations.
+- An **[interactive crash map](https://coopermalone.github.io/project_portfolio/vision-zero-crash-analysis/figures/crash_map.html)** for City staff, filterable by severity, travel mode, date, light and time of day.
+
+## Lane Marker Detection
+**Individual project**
+
+<a href="./lane-marker-detection"><img src="./lane-marker-detection/plots/metrics_overall.png" alt="SCNN validation metrics across epochs" width="560"></a>
+
+- Implemented a Spatial CNN, which passes messages row by row and column by column so that thin, continuous lane lines survive occlusion.
+- Trained in two phases on the university's GPU cluster with SLURM and mixed precision: 48 epochs on a 2k-image subset to debug the pipeline, then 48 more on the full 88k-image CULane training set.
+- Analyzed overfitting on the small subset and the failure cases (windshield glare, occluding trucks).
+
+## Adaptive Chunk-Based Compression
+**Individual project**
+
+- Implemented vByte, Elias gamma and bit-packing encoders and decoders from scratch, using bit-level buffered writes.
+- Built an adaptive compressor that encodes each chunk of a posting list with every codec, keeps the smallest, and stores a codec ID. The ID costs about 1–2% in metadata.
+- Benchmarked the codecs on Shakespeare, a newsgroups corpus and four synthetic gap distributions. Each codec wins somewhere; the adaptive one is the only codec that never finishes worse than second.
 
 ---
 
-## Contact & Connect
+## Skills shown
 
-* **Portfolio Maintainer:** Cooper Malone
-* **Email:** [coopercruz2004@gmail.com](mailto:coopercruz2004@gmail.com)
+- **Statistics:** hypothesis testing, count models (Poisson, negative binomial), maximum likelihood, empirical Bayes, SVD/PCA, multiple-comparison control
+- **Machine learning:** CNN segmentation, transfer learning, mixed-precision training, model evaluation (mIoU, F1)
+- **Engineering:** reproducible script pipelines, unit testing, HPC job scheduling, algorithm implementation at the bit level
+- **Communication:** technical reports, interactive maps and charts for a non-technical client
+
+## Contact
+
+Cooper Malone · [coopercruz2004@gmail.com](mailto:coopercruz2004@gmail.com)

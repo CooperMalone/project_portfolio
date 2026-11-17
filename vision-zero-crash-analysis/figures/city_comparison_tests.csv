@@ -1,0 +1,8 @@
+measure,city_pct,count_2025,n_2025,pct_2025,p_value,test,city_source
+KSI in High Risk Network tier,58.1,53,102.0,52.0,0.12,binomial,p. 10
+KSI involving a pedestrian,11.0,21,102.0,20.6,0.0034,binomial,p. 12
+KSI involving a motorcyclist,19.0,14,102.0,13.7,0.11,binomial,p. 12
+KSI involving a bicyclist,6.0,5,102.0,4.9,0.42,binomial,p. 12
+KSI with a male road user (known gender),60.4,68,94.0,72.3,0.011,binomial,p. 13
+KSI at a signalized intersection,55.5,31,102.0,30.4,2.7e-07,binomial,p. 15
+KSI crashes per year,,102,,,0.0057,"Poisson, lambda=130.5",p. 5

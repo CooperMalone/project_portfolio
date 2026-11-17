@@ -1,0 +1,6 @@
+mode,ksi_2025,pct_2025,pct_city_2014_2023,p_value
+Motor vehicle,57,55.9,64.0,0.0557
+Pedestrian,21,20.6,11.0,0.0034
+Motorcycle,14,13.7,19.0,0.106
+Bicycle,5,4.9,6.0,0.4211
+Scooter / ATV,5,4.9,,
