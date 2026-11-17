@@ -128,8 +128,13 @@ def test_dataset(name, data, chunk_size=128):
 # =========================
 # Run All Tests
 # =========================
-def run_all_tests():
+def run_all_tests(seed=0):
+    random.seed(seed)  # fixed seed so the results table is reproducible
     test_dataset("Uniform Small", generate_uniform_small())
     test_dataset("Clustered", generate_clustered())
     test_dataset("Sparse w/ Outliers", generate_sparse_with_outliers())
     test_dataset("Monotonic Gaps", generate_monotonic_gaps())
+
+
+if __name__ == "__main__":
+    run_all_tests()

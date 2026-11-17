@@ -2,46 +2,48 @@
 
 **University of Nebraska–Lincoln · individual project** · [Full paper (PDF)](./report.pdf)
 
-Search engines store, for every term, a *posting list*: the sorted IDs of the documents that contain it. Storing the gaps between consecutive IDs and compressing those integers is standard practice, but most systems pick one codec for everything. Real posting lists mix dense runs of small gaps with sparse stretches of large ones, so no single codec fits them all.
+Search engines store, for every term, a *posting list*: the sorted IDs or positions where the term occurs. These lists are stored as gaps between consecutive entries, and the gaps are compressed, usually with one codec for the whole index. But real lists mix dense runs of small gaps with sparse stretches of large ones, and no single codec suits both.
 
-This project implements three classic integer codecs from scratch and adds an **adaptive** scheme. It splits a list into chunks, encodes each chunk with every codec, keeps the smallest result, and records which codec it used.
+This project implements three integer codecs from scratch (vByte, Elias gamma and bit packing) and an **adaptive** scheme. It splits each list into chunks, encodes each chunk with every codec, keeps the smallest result, and stores a 1-byte codec ID with it.
 
 ## Results
 
-### No single codec wins everywhere, but the adaptive one is always first or second
+### When a list mixes patterns, adaptive wins by a lot
 
-Compressed size in bytes on four synthetic gap distributions (lower is better):
+<img src="./report/figures/synthetic_sizes.png" alt="Compressed size of each synthetic list by codec" width="640">
 
-| Distribution | vByte | Elias gamma | Bit packing | **Adaptive** | Winner |
-|---|---:|---:|---:|---:|---|
-| Uniform, small gaps | 10,000 | 6,272 | **5,009** | 5,783 | Bit packing |
-| Clustered | 20,000 | 23,750 | **3,757** | 4,540 | Bit packing |
-| Sparse with outliers | 10,890 | **6,858** | 21,259 | 7,091 | Elias gamma |
-| Monotonic gaps | 24,541 | 33,543 | 18,759 | **12,034** | **Adaptive** |
+Compressed size in bytes of 10,000-integer synthetic lists (lower is better; fixed random seed, chunks of 128):
 
-- **Bit packing** is excellent on tight, clustered data and poor when there are outliers, because one large value forces a wide bit width on every value in the block.
-- **Elias gamma** handles sparse data with outliers well and does poorly on clustered data.
-- **Adaptive** comes second wherever it doesn't win, and on monotonic gaps it beats every fixed codec by mixing them chunk by chunk. Storing the codec choice costs 79 bytes, about 1–2% of the output.
+| Dataset | vByte | Elias gamma | Bit packing | Best codec, chunked | **Adaptive** |
+|---|---:|---:|---:|---:|---:|
+| Uniform, small values | 10,000 | 6,238 | **5,009** | 5,711 | 5,781 |
+| Clustered | 20,000 | 23,750 | **3,759** | 4,461 | 4,540 |
+| Sparse with outliers | 10,978 | **6,982** | 21,259 | 7,012 | 7,091 |
+| Increasing positions | 24,452 | 33,509 | 18,759 | **11,955** | 12,034 |
+| **Mixed** (all four patterns in one list) | 15,083 | 15,415 | 21,259 | 10,749 | **7,647** |
 
-### On real text, adaptive edges out vByte
+- **Mixed list:** adaptive is **49% smaller** than the best codec applied to the whole list, and 29% smaller than the best single codec applied chunk by chunk. This is the case per-chunk selection is designed for.
+- **Single-pattern lists:** adaptive is never best, but it stays within 2% of the best codec at the same chunk size (the gap is its 79 codec IDs), without having to know that codec in advance.
 
-The real corpora were *The Complete Works of Shakespeare* (194 documents) and a 6-group subset of 20 Newsgroups (1,928 documents). On both, vByte and Adaptive gave the best compression ratios, around 0.45 on Shakespeare (compressed size ÷ original). Adaptive was slightly smaller than vByte at every chunk size, and Elias gamma and bit packing were far behind. Example output is in [`graphics/`](./graphics).
+### On real text, the codec IDs cost more than adaptivity saves
 
-### The trade-off is compression time
+On a positional index of Shakespeare's complete works (901k tokens, 59.5k terms), **vByte compresses best** at every chunk size, to about 45% of the original size. Adaptive picks vByte for 98% of chunks. Half the terms occur only once, so there are over 60,000 tiny chunks, and storing one byte per chunk makes the adaptive index **3–4% larger** than plain vByte. Even an ideal 2-bit ID still loses.
 
-Adaptive compression encodes each chunk once per codec, so it took about 11 s on the benchmark against about 2.5 s for vByte. Decoding doesn't pay that cost: each chunk carries its codec ID, so it is decoded in one pass. This trade-off makes sense for an index that is written once and read many times.
+The paper estimates that entropy-coding the IDs (about 0.15 bits per chunk) would reverse this, for a 0.2–0.6% gain over vByte. That points to the real design problem: keep the cost of each decision far below what it saves.
+
+### Cost: about 6 times slower to compress
+
+Compressing the full index took 1.81 s with adaptive against 0.31 s with vByte (pure Python). Decompression isn't affected, because each chunk is decoded once with its stored codec.
 
 ## How it works
 
 | Codec | Idea | File |
 |---|---|---|
 | **vByte** | 7 data bits per byte; the high bit marks whether more bytes follow | [`compression/vByte.py`](./compression/vByte.py) |
-| **Elias gamma** | Unary length prefix plus binary suffix, packed into a continuous bitstream across byte boundaries | [`compression/elias.py`](./compression/elias.py) |
-| **Bit packing** | Subtract the block minimum, then pack every value at the smallest bit width that fits the largest | [`compression/bitPacking.py`](./compression/bitPacking.py) |
+| **Elias gamma** | Unary length prefix plus binary suffix, written as one continuous bitstream across byte boundaries | [`compression/elias.py`](./compression/elias.py) |
+| **Bit packing** | Subtract the block minimum, then pack every value at the smallest width that fits the largest; 9-byte header | [`compression/bitPacking.py`](./compression/bitPacking.py) |
 | **Fixed chunking** | Split a list into equal blocks and compress each independently, which allows partial decoding | [`chunk/fixedChunk.py`](./chunk/fixedChunk.py) |
-| **Adaptive** | For each chunk, try every codec, keep the smallest, and store a codec ID | [`chunk/adaptiveChunk.py`](./chunk/adaptiveChunk.py), [`compression/adaptive.py`](./compression/adaptive.py) |
-
-The text pipeline (tokenize on whitespace → lowercase → deduplicate term/document pairs → gap-encode) is in [`utils/posting_list.py`](./utils/posting_list.py).
+| **Adaptive** | For each chunk, try every codec, keep the smallest, and store a 1-byte codec ID | [`chunk/adaptiveChunk.py`](./chunk/adaptiveChunk.py) |
 
 ## Running it
 
@@ -56,14 +58,13 @@ uv run python main.py          # synthetic benchmark (no downloads needed)
 uv run python -m pytest        # 98 unit tests, round-trip correctness for every codec
 ```
 
-The real-text comparisons need two datasets in `data/` (not committed): `t8.shakespeare.txt` ([Project Gutenberg #100](https://www.gutenberg.org/ebooks/100)) and `6_newsgroups.zip` (a subset of [20 Newsgroups](http://qwone.com/~jason/20Newsgroups/)). Then run any of:
+To reproduce every number and figure in the paper, put [`t8.shakespeare.txt`](https://ocw.mit.edu/ans7870/6/6.006/s08/lecturenotes/files/t8.shakespeare.txt) in `data/` and run:
 
 ```bash
-uv run python -m comparisons.vByte_Elias      # vByte vs Elias gamma, Shakespeare + Newsgroups
-uv run python -m comparisons.vByte_bitPack    # vByte vs bit packing
-uv run python -m comparisons.adaptive_comp    # adaptive vs all three codecs
-uv run python -m comparisons.synthetic        # same as main.py
+uv run --with matplotlib python report/make_figures.py   # writes report/results.json and report/figures/
 ```
+
+The paper's LaTeX source is in [`report/report.tex`](./report/report.tex).
 
 ## Structure
 
@@ -74,7 +75,7 @@ adaptive-chunk-compression/
 ├── comparisons/   # benchmark scripts (synthetic and real text)
 ├── utils/         # posting-list construction, data loading, timing
 ├── tests/         # pytest suite
-├── graphics/      # benchmark output
+├── report/        # paper source, figure script, results.json, figures
 ├── main.py        # entry point (synthetic benchmark)
-└── report.pdf     # full paper
+└── report.pdf     # the paper
 ```

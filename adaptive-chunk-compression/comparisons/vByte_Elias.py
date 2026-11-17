@@ -174,3 +174,6 @@ def run_newsgroups_comparison():
 def vByteEliasComparison():
     run_shakespeare_comparison()
     run_newsgroups_comparison()
+
+if __name__ == "__main__":
+    vByteEliasComparison()

@@ -5,8 +5,8 @@ Data science, statistics and machine learning projects from my work at the Unive
 | Project | What it is | Headline result | Stack |
 |---|---|---|---|
 | [**Vision Zero Crash Analysis**](./vision-zero-crash-analysis) | Checks whether the patterns behind Lincoln, NE's traffic-safety plan still hold, using all 6,776 crashes from 2025. Work for the City of Lincoln. | Pedestrians were in **20.6%** of fatal/serious-injury crashes, nearly double the plan's 11.0% (p = 0.003). Also found **8 high-risk intersections** that a raw crash count misses. | Python, pandas, SciPy, Folium, Matplotlib |
-| [**Lane Marker Detection**](./lane-marker-detection) | A Spatial CNN (ResNet-18 backbone) that segments lane markings in CULane driving images, trained on a GPU cluster. | Best validation **F1 = 0.437**, mIoU = 0.295, over 96 epochs (the last 48 on the full 88k-image set). | PyTorch, CUDA/AMP, SLURM, OpenCV |
-| [**Adaptive Chunk-Based Compression**](./adaptive-chunk-compression) | Integer codecs for search-engine posting lists (vByte, Elias gamma, bit packing), plus an adaptive scheme that picks the best codec for each chunk. | The adaptive codec placed **first or second on every data distribution tested**, and up to **77% smaller** than vByte. | Python, pytest (98 tests), uv |
+| [**Lane Marker Detection**](./lane-marker-detection) | A Spatial CNN (ResNet-18 backbone) that segments lane markings in CULane driving images, trained on a GPU cluster. | Best validation **F1 = 0.441**, IoU = 0.297. Showed that **44× more training data didn't help** and traced the plateau to the model's stride-32 output resolution. | PyTorch, CUDA/AMP, SLURM, OpenCV |
+| [**Adaptive Chunk-Based Compression**](./adaptive-chunk-compression) | Integer codecs for search-engine posting lists (vByte, Elias gamma, bit packing), plus an adaptive scheme that picks the best codec for each chunk. | **49% smaller** than the best fixed codec on lists that mix gap patterns. On real text the per-chunk codec IDs cost more than they save, and the paper works out why. | Python, pytest (98 tests), uv |
 
 ---
 
@@ -25,25 +25,26 @@ The City of Lincoln gave our team its full 2025 crash records. The question was 
 ## Lane Marker Detection
 **Individual project**
 
-<a href="./lane-marker-detection"><img src="./lane-marker-detection/plots/metrics_overall.png" alt="SCNN validation metrics across epochs" width="560"></a>
+<a href="./lane-marker-detection"><img src="./lane-marker-detection/report/figures/success_13.png" alt="Predicted lane mask next to a bus" width="560"></a>
 
-- Implemented a Spatial CNN, which passes messages row by row and column by column so that thin, continuous lane lines survive occlusion.
-- Trained in two phases on the university's GPU cluster with SLURM and mixed precision: 48 epochs on a 2k-image subset to debug the pipeline, then 48 more on the full 88k-image CULane training set.
-- Analyzed overfitting on the small subset and the failure cases (windshield glare, occluding trucks).
+- Implemented a Spatial CNN, which passes messages row by row and column by column so that lane lines stay continuous where they're hidden.
+- Trained in two phases on a V100 GPU with SLURM and mixed precision: 48 epochs on a 2k-image subset, then 48 more on the full 88,880-image CULane training set.
+- Found that the extra data never beat the subset's epoch-12 peak. Traced the plateau to message passing on a 9×25 feature grid, which can't draw lines a few pixels wide.
 
 ## Adaptive Chunk-Based Compression
 **Individual project**
 
 - Implemented vByte, Elias gamma and bit-packing encoders and decoders from scratch, using bit-level buffered writes.
-- Built an adaptive compressor that encodes each chunk of a posting list with every codec, keeps the smallest, and stores a codec ID. The ID costs about 1–2% in metadata.
-- Benchmarked the codecs on Shakespeare, a newsgroups corpus and four synthetic gap distributions. Each codec wins somewhere; the adaptive one is the only codec that never finishes worse than second.
+- Built an adaptive compressor that encodes each chunk of a posting list with every codec, keeps the smallest, and stores a codec ID.
+- Benchmarked on synthetic gap patterns and a positional index of Shakespeare, separating the benefit of chunking from the benefit of choosing a codec.
+- On mixed-pattern lists, adaptive was 49% smaller than any fixed codec. On real text, 52% of terms occur once, so the codec IDs outweigh the savings; entropy-coding them would turn that into a small gain.
 
 ---
 
 ## Skills shown
 
 - **Statistics:** hypothesis testing, count models (Poisson, negative binomial), maximum likelihood, empirical Bayes, SVD/PCA, multiple-comparison control
-- **Machine learning:** CNN segmentation, transfer learning, mixed-precision training, model evaluation (mIoU, F1)
+- **Machine learning:** CNN segmentation, transfer learning, mixed-precision training, model evaluation (IoU, F1), diagnosing why a model plateaus
 - **Engineering:** reproducible script pipelines, unit testing, HPC job scheduling, algorithm implementation at the bit level
 - **Communication:** technical reports, interactive maps and charts for a non-technical client
 

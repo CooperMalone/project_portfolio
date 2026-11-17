@@ -144,3 +144,7 @@ def vByteBitPackComparison():
     print("All compressions verified and compared!")
     print("=" * 70)
 
+
+
+if __name__ == "__main__":
+    vByteBitPackComparison()

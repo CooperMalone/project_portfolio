@@ -19,3 +19,11 @@ Thumbs.db
 
 # Crash data provided by the City of Lincoln (not for redistribution)
 *.xlsx
+
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz

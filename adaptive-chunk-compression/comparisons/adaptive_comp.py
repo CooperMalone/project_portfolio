@@ -67,9 +67,10 @@ def calculate_compressed_size(compressed_posting_list):
 
             if isinstance(chunks, list):
                 for chunk in chunks:
-                    # Adaptive case
+                    # Adaptive case: also count the 1-byte codec ID stored with each chunk
                     if isinstance(chunk, dict):
                         data = chunk["data"]
+                        total += 1
                     else:
                         data = chunk
 
@@ -238,3 +239,7 @@ def adaptiveComparison():
         )
 
     print("\nAll compressions verified!")
+
+
+if __name__ == "__main__":
+    adaptiveComparison()

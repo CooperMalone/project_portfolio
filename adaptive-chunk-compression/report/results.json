@@ -1,0 +1,152 @@
+{
+  "synthetic": {
+    "Uniform, small values": {
+      "whole": {
+        "vByte": 10000,
+        "Elias gamma": 6238,
+        "Bit packing": 5009
+      },
+      "chunked": {
+        "vByte": 10000,
+        "Elias gamma": 6268,
+        "Bit packing": 5711
+      },
+      "adaptive": 5781,
+      "chunks": 79
+    },
+    "Clustered": {
+      "whole": {
+        "vByte": 20000,
+        "Elias gamma": 23750,
+        "Bit packing": 3759
+      },
+      "chunked": {
+        "vByte": 20000,
+        "Elias gamma": 23750,
+        "Bit packing": 4461
+      },
+      "adaptive": 4540,
+      "chunks": 79
+    },
+    "Sparse with outliers": {
+      "whole": {
+        "vByte": 10978,
+        "Elias gamma": 6982,
+        "Bit packing": 21259
+      },
+      "chunked": {
+        "vByte": 10978,
+        "Elias gamma": 7012,
+        "Bit packing": 21869
+      },
+      "adaptive": 7091,
+      "chunks": 79
+    },
+    "Increasing positions": {
+      "whole": {
+        "vByte": 24452,
+        "Elias gamma": 33509,
+        "Bit packing": 18759
+      },
+      "chunked": {
+        "vByte": 24452,
+        "Elias gamma": 33511,
+        "Bit packing": 11955
+      },
+      "adaptive": 12034,
+      "chunks": 79
+    },
+    "Mixed": {
+      "whole": {
+        "vByte": 15083,
+        "Elias gamma": 15415,
+        "Bit packing": 21259
+      },
+      "chunked": {
+        "vByte": 15083,
+        "Elias gamma": 15435,
+        "Bit packing": 10749
+      },
+      "adaptive": 7647,
+      "chunks": 79
+    }
+  },
+  "shakespeare": {
+    "tokens": 901325,
+    "terms": 59508,
+    "singleton_terms": 31079,
+    "original_bytes": 3605300,
+    "by_chunk": {
+      "50": {
+        "chunks": 72319,
+        "ratio": {
+          "vByte": 0.4566446620253516,
+          "Elias gamma": 0.5998116661581561,
+          "Bit packing": 0.7507943860427704,
+          "Adaptive (no IDs)": 0.45565722686045546,
+          "Adaptive": 0.4757163065486922,
+          "Adaptive (2-bit IDs)": 0.4606720661248717
+        },
+        "picked": {
+          "vByte": 0.9850661651848062,
+          "Elias gamma": 0.0006498983669575077,
+          "Bit packing": 0.014283936448236287
+        }
+      },
+      "100": {
+        "chunks": 65328,
+        "ratio": {
+          "vByte": 0.4538806756719274,
+          "Elias gamma": 0.5938593182259452,
+          "Bit packing": 0.7268770976063018,
+          "Adaptive (no IDs)": 0.452345713255485,
+          "Adaptive": 0.47046570327018555,
+          "Adaptive (2-bit IDs)": 0.4568757107591601
+        },
+        "picked": {
+          "Bit packing": 0.01950159196669116,
+          "vByte": 0.9802228753367622,
+          "Elias gamma": 0.0002755326965466569
+        }
+      },
+      "200": {
+        "chunks": 62113,
+        "ratio": {
+          "vByte": 0.4525551271738829,
+          "Elias gamma": 0.5910259895154356,
+          "Bit packing": 0.7105724905000971,
+          "Adaptive (no IDs)": 0.4503505949574238,
+          "Adaptive": 0.4675788422600061,
+          "Adaptive (2-bit IDs)": 0.45465786481014064
+        },
+        "picked": {
+          "Bit packing": 0.020929596058796067,
+          "vByte": 0.9789738058055479,
+          "Elias gamma": 9.659813565598184e-05
+        }
+      },
+      "500": {
+        "chunks": 60388,
+        "ratio": {
+          "vByte": 0.4518273097939145,
+          "Elias gamma": 0.5894635675255874,
+          "Bit packing": 0.693474329459407,
+          "Adaptive (no IDs)": 0.4487415749036141,
+          "Adaptive": 0.46549135994230717,
+          "Adaptive (2-bit IDs)": 0.45292902116328737
+        },
+        "picked": {
+          "Bit packing": 0.02157713453003908,
+          "vByte": 0.9783731867258396,
+          "Elias gamma": 4.967874412134861e-05
+        }
+      }
+    },
+    "seconds": {
+      "vByte": 0.31338211666665455,
+      "Elias gamma": 1.1685028833333415,
+      "Bit packing": 0.32835070833338403,
+      "Adaptive": 1.8080066750000015
+    }
+  }
+}
