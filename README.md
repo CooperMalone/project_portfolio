@@ -20,7 +20,7 @@ The City of Lincoln gave our team its full 2025 crash records. The question was 
 - **Hypothesis tests** (binomial and Poisson) of seven of the plan's headline statistics against 2025.
 - **Safety performance functions** fit by maximum likelihood to a zero-truncated negative binomial, then **empirical Bayes** estimates to rank 925 intersections by excess crashes for their traffic volume.
 - **Singular value decomposition** of crash conditions (weather, light, time of day) at the 47 highest-crash locations.
-- An **[interactive crash map](https://coopermalone.github.io/project_portfolio/vision-zero-crash-analysis/figures/crash_map.html)** for City staff, filterable by severity, travel mode, date, light and time of day.
+- An **[interactive crash map](https://coopermalone.github.io/project_portfolio/vision-zero-crash-analysis/figures/crash_map.html)** for City staff, filterable by severity, travel mode, date, light and time of day. Website for the map: https://vision-zero-crash-analysis-map.netlify.app/
 
 ## Lane Marker Detection
 **Individual project**
